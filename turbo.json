@@ -1,0 +1,37 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalEnv": [
+    "BASELIME_API_KEY",
+    "DATABASE_URL",
+    "MP_ACCESS_TOKEN",
+    "STRIPE_PUSHABLE_KEY",
+    "STRIPE_SECRET_KEY"
+  ],
+  "tasks": {
+    "build": {
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*",
+        "BASELIME_API_KEY",
+        "DATABASE_URL",
+        "MP_ACCESS_TOKEN",
+        "STRIPE_PUSHABLE_KEY",
+        "STRIPE_SECRET_KEY"
+      ],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"],
+      "dependsOn": ["^build"]
+    },
+    "test": {
+      "outputs": ["coverage/**"],
+      "dependsOn": []
+    },
+    "lint": {},
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "clean": {
+      "cache": false
+    }
+  }
+}

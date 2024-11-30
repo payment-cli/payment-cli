@@ -1,0 +1,10 @@
+{
+  "extends": "@rccpr/tsconfig/base.json",
+  "include": [".", ".eslintrc.js"],
+  "exclude": ["dist", "build", "node_modules"],
+  "compilerOptions": {
+    "lib": ["ES2022"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext"
+  }
+}

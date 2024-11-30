@@ -1,0 +1,16 @@
+[
+  {
+    "name": "checkout-component",
+    "dependencies": [
+      "lucide-react"
+    ],
+    "registryDependencies": [
+      "card-item",
+      "checkout-form",
+      "checkout",
+      "checkout-action",
+      "paymentMethod-button"
+    ],
+    "type": "components:ui"
+  }
+]

@@ -1,0 +1,23 @@
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+model PaymentIntent {
+    id          String   @id @default(cuid()) // UUID or cuid for unique IDs
+    externalId  String
+    serviceName String
+    currency    String
+    baseUnit    Int
+    status      String   @default("PROCESSING")
+    metadata    Json? // Optional JSON field
+    createdAt   DateTime @default(now()) // Automatically set the current timestamp
+    updatedAt   DateTime @updatedAt // Automatically update on modification
+
+    @@index([externalId]) // Add index if needed for frequent lookups
+    @@index([serviceName]) // Optional: index by service name
+}

@@ -1,0 +1,11 @@
+{
+  "name": "checkout-action",
+  "dependencies": ["@rccpr/sdk"],
+  "files": [
+    {
+      "name": "checkout.action.ts",
+      "content": "\"use server\";\n\nimport { PaySdk } from \"@rccpr/sdk\";\n\nconst sdk = new PaySdk({\n});\n\nexport const payWithProvider = async (\n  provider: string,\n  amount: number,\n  currency = \"USD\"\n) => {\n  const { link } = await sdk.requestPaymentLink({\n    service: 'stripe',\n    selectedCurrency:  \"USD\",\n    unitBase: 1000,\n    referenceId: \"123\",\n  });\n\n  return  'https://www.paymentcli.xyz' + link;;\n};\n\nexport const getSupportedPaymentMethods = async () => {\n  return await sdk.getSupportedProviderForCurrency(\"USD\");\n};\n"
+    }
+  ],
+  "type": ":checkout.action"
+}
