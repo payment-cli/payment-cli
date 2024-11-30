@@ -1,0 +1,75 @@
+# Example CI/CD
+name: Sync OSS Packages!
+on:
+  push:
+    branches:
+      - main
+
+env:
+  CLOSED_SOURCE_REPO: ${{ vars.CLOSED_SOURCE_REPO }}
+  OPEN_SOURCE_REPO: payment-cli/payment-cli
+  OPEN_SOURCE_PATH: open-source
+  CLOSED_SOURCE_PATH: closed-source
+  GIT_USER_NAME: OSS Sync
+  GIT_USER_EMAIL: oss@paymentcli.xyz
+  CLOSED_SOURCE_BRANCH: main
+  OPEN_SOURCE_BRANCH: main
+
+jobs:
+  sync-packages:
+    if: github.repository == ${{ vars.CLOSED_SOURCE_REPO }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the monorepo
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ env.CLOSED_SOURCE_REPO }}
+          path: ${{ env.CLOSED_SOURCE_PATH }}
+
+      - name: Check out the open monorepo
+        uses: actions/checkout@v3
+
+        with:
+          repository: ${{ env.OPEN_SOURCE_REPO }}
+          path: ${{ env.OPEN_SOURCE_PATH }}
+
+      - name: Set ssh key
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Install git-filter-repo
+        run: |
+          sudo apt-get install -y git-filter-repo
+
+      - name: Install Dependencies
+        working-directory: ${{ env.CLOSED_SOURCE_PATH }}
+        run: |
+          yarn install
+
+      - uses: oven-sh/setup-bun@v2
+      - name: Filter the open-source packages
+        working-directory: ${{ env.CLOSED_SOURCE_PATH }}
+        run: yarn oss force
+
+      - name: Sync commits
+        working-directory: ${{ env.OPEN_SOURCE_PATH }}
+        run: |
+          git config pull.rebase false
+          git config --global user.email "${{ env.GIT_USER_EMAIL }}"
+          git config --global user.name "${{ env.GIT_USER_NAME }}"
+          git checkout -b sync/${{ github.run_id }};
+          git remote add source ../${{ env.CLOSED_SOURCE_PATH }};
+          git pull source ${{ env.CLOSED_SOURCE_BRANCH }} --allow-unrelated-histories --strategy-option theirs --no-edit;
+
+      - name: Push commits
+        working-directory: ${{ env.OPEN_SOURCE_PATH }}
+        run: |
+          git remote remove origin
+          git remote add origin git@github.com:${{ env.OPEN_SOURCE_REPO }}.git
+          git push --set-upstream origin sync/${{ github.run_id }};

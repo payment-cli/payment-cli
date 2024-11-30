@@ -1,0 +1,15 @@
+{
+  "name": "card-item",
+  "type": ":CartItem",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "files": [
+    {
+      "name": "CartItem.tsx",
+      "content": "import { Minus, Plus, X } from 'lucide-react';\n\ninterface CartItemProps {\n  id: number;\n  name: string;\n  price: number;\n  quantity: number;\n  image: string;\n  onUpdateQuantity: (id: number, newQuantity: number) => void;\n  onRemove: (id: number) => void;\n}\n\nexport default function CartItem({\n  id,\n  name,\n  price,\n  quantity,\n  image,\n  onUpdateQuantity,\n  onRemove,\n}: CartItemProps) {\n  return (\n    <div className=\"flex items-center py-4 border-b border-gray-100\">\n      <img\n        src={image}\n        alt={name}\n        className=\"w-20 h-20 object-cover rounded-lg\"\n      />\n      <div className=\"flex-1 ml-4\">\n        <h3 className=\"text-sm font-medium text-gray-900\">{name}</h3>\n        <p className=\"mt-1 text-sm text-gray-500\">${price.toFixed(2)}</p>\n      </div>\n      <div className=\"flex items-center space-x-2\">\n        <button\n          onClick={() => onUpdateQuantity(id, quantity - 1)}\n          disabled={quantity <= 1}\n          className=\"p-1 rounded-full hover:bg-gray-100 disabled:opacity-50\"\n        >\n          <Minus className=\"w-4 h-4\" />\n        </button>\n        <span className=\"w-8 text-center\">{quantity}</span>\n        <button\n          onClick={() => onUpdateQuantity(id, quantity + 1)}\n          className=\"p-1 rounded-full hover:bg-gray-100\"\n        >\n          <Plus className=\"w-4 h-4\" />\n        </button>\n      </div>\n      <button\n        onClick={() => onRemove(id)}\n        className=\"ml-4 p-1 rounded-full hover:bg-gray-100\"\n      >\n        <X className=\"w-4 h-4\" />\n      </button>\n    </div>\n  );\n}",
+      "type": "registry:ui",
+      "target": ""
+    }
+  ]
+}

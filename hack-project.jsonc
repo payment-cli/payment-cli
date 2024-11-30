@@ -1,0 +1,10 @@
+{ 
+    // nombre de su producto / solución
+    "project_name": "PaymentCLI",
+    // descripción de una frase y directa al grano de la solución
+    "oneliner": "Integrate to your favorite payment method only in a few minutes",
+    // url al logo de proyecto. mínimo 200x200, png. puede estar hosteado en el mismo repo.
+    "logo_url": "https://github.com/projects/team-9/app/public/assests/logo.png",
+    // url para acceder a su app. si es apk u otro, link de descarga directa.
+    "app_url": "https://paymentcli.xyz"
+}

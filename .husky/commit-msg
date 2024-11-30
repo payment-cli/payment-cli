@@ -1,0 +1,8 @@
+npx --no-install commitlint --edit $1 ||
+(
+  echo '👋✋ Hey you typed a wrong message! 👋✋ 
+    Commitlint ensures you keep best practices by enforcing you to follow them!'
+  false; 
+)
+
+echo '🎉🎊🥳🚀😎 Awesome, your commit rocks all over the place!'

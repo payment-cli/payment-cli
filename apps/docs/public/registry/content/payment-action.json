@@ -1,0 +1,13 @@
+{
+  "name": "payment-action",
+  "dependencies": [
+    "razorpay"
+  ],
+  "files": [
+    {
+      "name": "payment-action.tsx",
+      "content": "\"use server\";\nimport Razorpay from \"razorpay\";\nimport products from \"@/data/products.json\";\nimport { createHmac } from \"crypto\";\n\ninterface CreateOrdersInput {\n  productId: number;\n  quantity: number;\n}\n\nexport async function createOrders({ productId, quantity }: CreateOrdersInput) {\n  if (!productId || !quantity) {\n    return { error: \"Invalid input\" };\n  }\n\n  const product = products.find((product) => product.id === productId);\n\n  if (!product) {\n    return { error: \"Product not found\" };\n  }\n\n  try {\n    const key_id = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;\n    const key_secret = process.env.RAZORPAY_KEY_SECRET;\n\n    if (!key_id || !key_secret) {\n      console.log(\"Razorpay keys are missing\");\n      return { error: \"Razorpay keys are missing\" };\n    }\n\n    const instance = new Razorpay({\n      key_id,\n      key_secret,\n    });\n\n    const orders = await instance.orders.create({\n      amount: (product.price - product.price * (product.discount / 100)) * 100,\n      currency: \"INR\",\n    });\n\n    if (!orders) {\n      return { error: \"Error creating orders\" };\n    }\n\n    // Save the order details in the database\n\n    return { orderId: orders.id };\n  } catch (error) {\n    console.log(\"Error creating orders\", error);\n    return { error: \"Error creating orders\" };\n  }\n}\n\nexport async function verifyPayment(data: {\n  razorpay_payment_id: string;\n  razorpay_order_id: string;\n  razorpay_signature: string;\n}) {\n  try {\n    const shasum = createHmac(\"sha256\", process.env.RAZORPAY_KEY_SECRET!);\n    shasum.update(`${data.razorpay_order_id}|${data.razorpay_payment_id}`);\n    const digest = shasum.digest(\"hex\");\n\n    if (digest !== data.razorpay_signature) {\n      return { error: \"Transaction not legit!\" };\n    }\n\n    // Save the payment details in the database\n\n    return { success: true };\n  } catch (error) {\n    console.log(\"Error verifying payment\", error);\n    return { error: \"Error verifying payment\" };\n  }\n}\n"
+    }
+  ],
+  "type": "hooks:payment-component"
+}

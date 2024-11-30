@@ -1,0 +1,20 @@
+{
+  "name": "oss-utils",
+  "version": "0.0.0",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint \"**/*.ts*\""
+  },
+  "devDependencies": {
+    "@rccpr/eslint-config": "*",
+    "@types/node": "^22.10.1",
+    "eslint": "^8.57.0",
+    "tsconfig": "*",
+    "typescript": "^5.5"
+  },
+  "dependencies": {
+    "find-nearest-package-json": "^2.0.1"
+  }
+}

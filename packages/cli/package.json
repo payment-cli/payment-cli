@@ -1,0 +1,52 @@
+{
+  "name": "@rccpr/cli",
+  "version": "0.1.3",
+  "description": "CLI project",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "type": "module",
+  "license": "MIT",
+  "files": [
+    "dist/**"
+  ],
+  "bin": {
+    "cli": "./cli"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm,cjs --dts",
+    "start": "tsup --onSuccess 'node dist/index.js'",
+    "dev": "tsup --watch --onSuccess 'node dist/index.js'",
+    "lint": "eslint . -c ./src/*.ts"
+  },
+  "author": "Diego Garcia (Outcast50903)",
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
+    "consola": "^3.2.3",
+    "dotenv": "^16.4.5",
+    "execa": "^9.5.1",
+    "ora": "^8.1.1",
+    "prompts": "^2.4.2",
+    "winston": "^3.17.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.6.0",
+    "@commitlint/config-conventional": "^19.6.0",
+    "@types/prompts": "^2.4.9",
+    "@typescript-eslint/eslint-plugin": "^8.15.0",
+    "@typescript-eslint/parser": "^8.15.0",
+    "eslint": "^9.15.0",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-unused-imports": "^4.1.4",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.2.10",
+    "tsup": "^8.3.5",
+    "validate-branch-name": "^1.3.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
