@@ -21,7 +21,7 @@ import { createFiles, installDependencies, resolveItemsTree } from "@/commands/f
  */
 export default async function addComponents(
   components: string[], 
-  opt: { overwrite: boolean; yes: boolean; }
+  opt: { overwrite: boolean }
 ): Promise<void> {
   const registrySpinner = spinner({ text: `Checking registry.` })?.start()
   const tree = await resolveItemsTree(components);
