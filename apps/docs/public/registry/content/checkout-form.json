@@ -1,15 +1,18 @@
 {
   "name": "checkout-form",
-  "type": ":CheckoutForm",
+  "type": "components:CheckoutForm",
   "dependencies": [
     "lucide-react"
   ],
+  "registryDependencies": [
+    "checkout-action",
+    "paymentMethod-button"
+  ],
   "files": [
     {
-      "name": "CheckoutForm.tsx",
+      "path": "CheckoutForm.tsx",
       "content": "import { useState } from 'react';\nimport { Lock, CreditCard, WalletCards } from 'lucide-react';\nimport { PaymentMethodButton } from './PaymentMethodButton';\nimport { payWithProvider } from \"./checkout.action\";\n\nconst paymentMethods = [\n  {\n    id: 'stripe',\n    name: 'Stripe',\n    icon: CreditCard,\n    description: 'Pay with stripe',\n    color: 'bg-indigo-600 hover:bg-indigo-700'\n  },\n  {\n    id: 'mercadopago',\n    name: 'Mercado Pago',\n    icon: WalletCards,\n    description: 'Pay with Mercado Pago',\n    color: 'bg-black hover:bg-gray-900'\n  },\n  {\n    id: 'fintoc',\n    name: 'Fintoc',\n    icon: CreditCard,\n    description: 'Pay with Fintoc',\n    color: 'bg-blue-500 hover:bg-blue-600'\n  }\n];\n\ntype PaymentProvider = \"stripe\" | \"fintoc\" | \"mercadopago\";\n\nexport default function CheckoutForm() {\n  const total = 89.97;\n  const [selectedMethod, setSelectedMethod] = useState<string | null>(null);\n  const [isLinkFailOpen, setIsLinkFailOpen] = useState<boolean>(true);\n  const [link, setLink] = useState<string | null>(null);\n  const [isLoading, setIsLoading] = useState<boolean>(false);\n  \n  function openNewTab(url: string) {\n    const newTab = window.open(url, '_blank');\n    setIsLinkFailOpen(!newTab || newTab.closed || typeof newTab.closed == 'undefined')\n  }\n\n  const handlePurchase = async (provider: PaymentProvider | null) => {\n    if (!provider) return;\n    setIsLoading(true);\n    try {\n      const link = await payWithProvider(provider, total);\n      openNewTab(link);\n      setLink(link);\n    } catch (error) {\n      console.error(\"Purchase failed:\", error);\n    } finally {\n      setSelectedMethod(null)\n      setIsLoading(isLoading);\n    }\n  };\n\n  return (\n    <div className=\"mt-8\">\n      <div className=\"flex items-center justify-between mb-6\">\n        <h2 className=\"text-lg font-semibold text-gray-900\">Choose Payment Method</h2>\n        <div className=\"flex items-center text-sm text-gray-500\">\n          <Lock className=\"w-4 h-4 mr-1\" />\n          Secure Payment\n        </div>\n      </div>\n      <div className=\"space-y-4\">\n        {paymentMethods.map((method) => {\n          return (\n            <PaymentMethodButton\n              key={method.id}\n              {...method} \n              selectedMethod={selectedMethod} \n              onClick={() => setSelectedMethod(method.id)}\n              disabled={isLoading}\n            />\n          );\n        })}\n      </div>\n      <button\n        type=\"submit\"\n        disabled={!selectedMethod || isLoading}\n        onClick={() => handlePurchase(selectedMethod as PaymentProvider)}\n        className={`w-full mt-6 py-3 px-4 rounded-lg font-medium text-white transition-colors ${\n          selectedMethod\n            ? 'bg-blue-600 hover:bg-blue-700'\n            : 'bg-gray-400 cursor-not-allowed'\n        } ${isLoading ? 'bg-gray-400 cursor-not-allowed hover:bg-gray-400' : null}`}\n      >\n        {isLoading ? \"Processing...\" : `Pay ${total.toFixed(2)}`}\n      </button>\n      {(isLinkFailOpen && link) && <a \n        className='text-blue-500 cursor-pointer underline font-semibold text-sm' \n        onClick={() => openNewTab(link)}>\n        Please open this link to continue to the pay flow\n      </a>}\n      <p className=\"mt-4 text-center text-sm text-gray-500\">\n        By clicking Pay, you agree to our Terms and Conditions\n      </p>\n    </div>\n  );\n}",
-      "type": "registry:ui",
-      "target": ""
+      "type": "components:index"
     }
   ]
 }

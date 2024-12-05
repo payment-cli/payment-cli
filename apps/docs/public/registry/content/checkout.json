@@ -1,15 +1,18 @@
 {
   "name": "checkout",
-  "type": ":Checkout",
+  "type": "components:Checkout",
   "dependencies": [
     "lucide-react"
   ],
+  "registryDependencies": [
+    "card-item",
+    "checkout-form"
+  ],
   "files": [
     {
-      "name": "Checkout.tsx",
+      "path": "Checkout.tsx",
       "content": "'use client'\nimport { useState } from 'react';\nimport { ShoppingBag } from 'lucide-react';\nimport CartItem from './CartItem';\nimport CheckoutForm from './CheckoutForm';\n\ninterface CartItemType {\n  id: number;\n  name: string;\n  price: number;\n  quantity: number;\n  image: string;\n}\n\nfunction CheckOut() {\n  const [cartItems, setCartItems] = useState<CartItemType[]>([\n    {\n      id: 1,\n      name: \"Salsa Chili Mixes Fintual\",\n      price: 49.99,\n      quantity: 1,\n      image: \"https://store.fintual.cl/cdn/shop/products/Redessociales_Cyber-22copia-2_1080x.jpg?v=1669726962\"\n    },\n    {\n      id: 2,\n      name: \"Smart Watch Series 5\",\n      price: 29.99,\n      quantity: 1,\n      image: \"https://images.unsplash.com/photo-1546868871-7041f2a55e12?auto=format&fit=crop&q=80&w=200&h=200\"\n    }\n  ]);\n\n  const updateQuantity = (id: number, newQuantity: number) => {\n    if (newQuantity < 1) return;\n    setCartItems(items =>\n      items.map(item =>\n        item.id === id ? { ...item, quantity: newQuantity } : item\n      )\n    );\n  };\n\n  const removeItem = (id: number) => {\n    setCartItems(items => items.filter(item => item.id !== id));\n  };\n\n  const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);\n  const shipping = 9.99;\n  const total = subtotal + shipping;\n\n  return (\n    <div className=\"min-h-screen bg-gray-50\">\n      <div className=\"max-w-4xl mx-auto px-4 py-8\">\n        <div className=\"bg-white rounded-2xl shadow-lg p-6 md:p-8\">\n          <div className=\"flex items-center justify-between mb-8\">\n            <h1 className=\"text-2xl font-bold text-gray-900\">Fintualist</h1>\n            <div className=\"relative\">\n              <ShoppingBag className=\"w-6 h-6 text-gray-600\" />\n              <span className=\"absolute -top-2 -right-2 bg-blue-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center\">\n                {cartItems.length}\n              </span>\n            </div>\n          </div>\n\n          <div className=\"grid md:grid-cols-5 gap-8\">\n            <div className=\"md:col-span-3\">\n              <div className=\"space-y-1\">\n                <h2 className=\"text-xl font-semibold text-gray-900\">Shopping Cart</h2>\n                <p className=\"text-sm text-gray-500\">{cartItems.length} items in your cart</p>\n              </div>\n\n              <div className=\"mt-6 divide-y divide-gray-100\">\n                {cartItems.map(item => (\n                  <CartItem\n                    key={item.id}\n                    {...item}\n                    onUpdateQuantity={updateQuantity}\n                    onRemove={removeItem}\n                  />\n                ))}\n              </div>\n\n              <div className=\"mt-8 space-y-4\">\n                <div className=\"flex justify-between text-sm\">\n                  <span className=\"text-gray-600\">Subtotal</span>\n                  <span className=\"font-medium\">${subtotal.toFixed(2)}</span>\n                </div>\n                <div className=\"flex justify-between text-sm\">\n                  <span className=\"text-gray-600\">Shipping</span>\n                  <span className=\"font-medium\">${shipping.toFixed(2)}</span>\n                </div>\n                <div className=\"flex justify-between text-base font-semibold\">\n                  <span>Total</span>\n                  <span>${total.toFixed(2)}</span>\n                </div>\n              </div>\n            </div>\n\n            <div className=\"md:col-span-2\">\n              <CheckoutForm />\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  );\n}\n\nexport default CheckOut;",
-      "type": "registry:ui",
-      "target": ""
+      "type": "components:index"
     }
   ]
 }
