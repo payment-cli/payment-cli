@@ -5,11 +5,7 @@
       "lucide-react"
     ],
     "registryDependencies": [
-      "card-item",
-      "checkout-form",
-      "checkout",
-      "checkout-action",
-      "paymentMethod-button"
+      "checkout"
     ],
     "type": "components:ui"
   }

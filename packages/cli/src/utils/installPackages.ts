@@ -1,13 +1,21 @@
-import consola from "consola";
 import { PMType } from "@/types";
-import { spinner } from "@/index";
-import { runCommand } from "./runCommand";
-import { handleErrors } from "./handleErrors";
+import { runCommand, handleErrors } from "@/utils";
 
-export const installPackages = async (
-  packages: { regular: string } | { dev: string; text?: string },
+/**
+ * Installs the specified packages using the provided package manager type.
+ *
+ * @param packages - An object containing either regular or dev packages to install.
+ * @param packages.regular - A string of regular packages to install, separated by spaces.
+ * @param packages.dev - A string of dev packages to install, separated by spaces.
+ * @param pmType - The type of package manager to use ("npm" or other).
+ * @returns A promise that resolves when the installation is complete.
+ *
+ * @throws Will handle errors and exit the process with code 0 if an error occurs during installation.
+ */
+export default async function installPackages(
+  packages: { regular: string } | { dev: string },
   pmType: PMType
-) => {
+): Promise<void> {
   const installCommand = pmType === "npm" ? "install" : "add";
 
   try {
