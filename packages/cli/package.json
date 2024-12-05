@@ -20,7 +20,10 @@
     "dev": "tsup --watch --onSuccess 'node dist/index.js'",
     "lint": "eslint . -c ./src/*.ts"
   },
-  "author": "Diego Garcia (Outcast50903)",
+  "author": {
+    "name": "Payment CLI",
+    "url": "https://www.paymentcli.xyz/"
+  },
   "dependencies": {
     "chalk": "^5.3.0",
     "commander": "^12.1.0",
@@ -33,18 +36,8 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.6.0",
-    "@commitlint/config-conventional": "^19.6.0",
     "@types/prompts": "^2.4.9",
-    "@typescript-eslint/eslint-plugin": "^8.15.0",
-    "@typescript-eslint/parser": "^8.15.0",
-    "eslint": "^9.15.0",
-    "eslint-plugin-simple-import-sort": "^12.1.1",
-    "eslint-plugin-unused-imports": "^4.1.4",
-    "husky": "^9.1.7",
-    "lint-staged": "^15.2.10",
-    "tsup": "^8.3.5",
-    "validate-branch-name": "^1.3.1"
+    "tsup": "^8.3.5"
   },
   "publishConfig": {
     "access": "public"

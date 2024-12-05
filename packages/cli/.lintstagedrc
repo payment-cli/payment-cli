@@ -1,5 +1,0 @@
-{
-  "*/**/*.ts|js": [
-    "validate-branch-name"
-  ]
-}
