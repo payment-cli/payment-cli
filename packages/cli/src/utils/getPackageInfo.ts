@@ -1,12 +1,16 @@
-import { PackageInfo } from "@/types";
-import fs from "fs";
-import path from "path";
+import { readFileSync } from "fs";
+import { resolve, join } from "path";
 
-// export const getPackageInfo = () => {
-//   return require("./package.json") as PackageInfo;
-// };
-export const getPackageInfo = () => {
-  const packageJsonPath = path.resolve("./", "package.json");
-  const packageJson = fs.readFileSync(packageJsonPath, "utf-8");
+import { PackageInfo } from "@/types";
+
+/**
+ * Retrieves the package information from the `package.json` file.
+ *
+ * @returns {PackageInfo} The parsed contents of the `package.json` file.
+ */
+export default function getPackageInfo(): PackageInfo {
+  const __dirname = resolve();
+  const packageJsonPath = join(__dirname, '/package.json');
+  const packageJson = readFileSync(packageJsonPath, "utf-8");
   return JSON.parse(packageJson) as PackageInfo;
 };
