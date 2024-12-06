@@ -1,0 +1,4 @@
+{
+  "pattern": "^(feat|fix|docs|style|refactor|perf|test|chore)\\/([a-z0-9\\-]+)$",
+  "errorMsg": "Branch name does not follow the convention: <type>/<context> (e.g., feat/my-feature)"
+}

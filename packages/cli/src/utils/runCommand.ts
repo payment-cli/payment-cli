@@ -1,10 +1,8 @@
 import { execa } from "execa";
-import { handleErrors } from "@/utils";
+import { handleErrors } from "./handleErrors";
+import consola from "consola";
 
-export default async function runCommand(
-  command: string, 
-  args: string[]
-): Promise<void> {
+export const runCommand = async (command: string, args: string[]) => {
   const formattedArgs = args.filter((a) => a !== "");
   try {
     await execa(command, formattedArgs, {
