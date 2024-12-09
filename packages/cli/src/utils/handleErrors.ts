@@ -22,4 +22,4 @@ export default function handleErrors(error: unknown) {
 
   logger.error("Something went wrong. Please try again.");
   process.exit(1);
-};
+}

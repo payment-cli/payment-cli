@@ -35,4 +35,4 @@ export default async function installPackages(
     handleErrors(error);
     process.exit(0);
   }
-};
+}

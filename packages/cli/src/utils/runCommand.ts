@@ -2,7 +2,7 @@ import { execa } from "execa";
 import { handleErrors } from "@/utils";
 
 export default async function runCommand(
-  command: string, 
+  command: string,
   args: string[]
 ): Promise<void> {
   const formattedArgs = args.filter((a) => a !== "");
@@ -15,4 +15,4 @@ export default async function runCommand(
     handleErrors(error);
     process.exit(0);
   }
-};
+}
