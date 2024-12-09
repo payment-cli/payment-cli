@@ -1,0 +1,38 @@
+{
+  "name": "@rccpr/sdk",
+  "version": "0.1.0",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "license": "MIT",
+  "files": [
+    "dist/**"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm,cjs --dts",
+    "dev": "tsup src/index.ts --format esm,cjs --watch --dts",
+    "lint": "eslint \"src/**/*.ts*\"",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+  },
+  "devDependencies": {
+    "@rccpr/core": "*",
+    "@rccpr/eslint-config": "*",
+    "@rccpr/tsconfig": "*",
+    "eslint": "^8.57.0",
+    "tsup": "^8.0.2",
+    "type-fest": "^4.27.1",
+    "typescript": "5.5.4"
+  },
+  "dependencies": {
+    "@effect/platform": "^0.69.25",
+    "axios": "^1.7.7",
+    "cookie": "^1.0.2",
+    "effect": "^3.10.16",
+    "ts-pattern": "^5.5.0",
+    "zod": "^3.23.8"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
