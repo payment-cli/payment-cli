@@ -1,2 +1,2 @@
-export * from './add';
-export * from './registry';
+export * from "./add";
+export * from "./registry";
