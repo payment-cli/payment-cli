@@ -9,6 +9,7 @@ import { RccprHandler } from "./internal.types";
 import { SupportedCurrencies, SupportedHTTPMethod } from "./constants";
 import z from "zod";
 import { processRequest } from "./request-handler";
+import { openapiDocument } from "./openapi";
 
 type Integrations = {
   [T in string]: Layer.Layer<
@@ -206,6 +207,13 @@ export class Core {
           };
         }
       );
+
+      router.add(SupportedHTTPMethod.GET, "/api-docs.json", async () => {
+        return {
+          headers: { "Content-Type": "application/json" },
+          body: openapiDocument,
+        };
+      });
     } catch (e) {
       console.log(e);
     }
