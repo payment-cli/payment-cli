@@ -93,8 +93,10 @@ export const processRequest = async (
     );
     return toResponse(internalResponse);
   } catch (error) {
-    return new Response(
-      `Error: There was an error while processing your request.`,
+    return Response.json(
+      {
+        message: `Error: There was an error while processing your request.`,
+      },
       { status: 400 }
     );
   }
