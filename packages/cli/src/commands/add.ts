@@ -14,7 +14,7 @@ export const add = new Command()
     try {
       const options = addOptionsSchema.parse({ components, ...opt });
       if (!options.components?.length) {
-        options.components = await getRegistryComponents(options)
+        options.components = await getRegistryComponents(options);
       }
 
       await addComponents(options.components, options);
