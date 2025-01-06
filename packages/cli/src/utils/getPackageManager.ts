@@ -12,7 +12,7 @@ import { getFilePath } from "@/utils";
  * - "pnpm" if a `pnpm-lock.yaml` file is found.
  * - "npm" if none of the above lock files are found.
  */
-export default function getPackageManager(): PMType {  
+export default function getPackageManager(): PMType {
   if (existsSync(getFilePath("yarn.lock"))) {
     return "yarn";
   }
@@ -23,4 +23,4 @@ export default function getPackageManager(): PMType {
     return "pnpm";
   }
   return "npm";
-};
+}

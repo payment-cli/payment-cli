@@ -65,10 +65,19 @@ abstract class Data<TransactionCTX = PlaceholderCTX> {
 
     return {} as PaymentIntent;
   }
+  
   async getOrderById(value: string): Promise<PaymentIntent | null> {
-    throw new Error("you must implement getOrderByExternalId");
+    throw new Error("you must implement getOrderById");
+    return null;
+  }
 
-    return {} as PaymentIntent;
+  async validateApiKey(apiKey: string): Promise<{ 
+    isValid: boolean; 
+    userId?: string; 
+    environment?: "production" | "staging" | "development";
+  }> {
+    throw new Error("you must implement validateApiKey");
+    return { isValid: false };
   }
 }
 

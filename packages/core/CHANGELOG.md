@@ -1,5 +1,11 @@
 # @rccpr/core
 
+## 0.2.3
+
+### Patch Changes
+
+- fix registry and add openapi initial
+
 ## 0.2.2
 
 ### Patch Changes

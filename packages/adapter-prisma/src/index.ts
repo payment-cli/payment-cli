@@ -1,6 +1,12 @@
 import type { PrismaClient } from "@prisma/client";
 import type { DataServiceType, PaymentIntent } from "@rccpr/core";
 
+const isValidEnvironment = (
+  environment: string
+): environment is "production" | "staging" | "development" => {
+  return ["production", "staging", "development"].includes(environment);
+};
+
 export const prismaAdapter = (prisma: PrismaClient): DataServiceType => {
   return {
     async updatePaymentIntent(
@@ -33,6 +39,26 @@ export const prismaAdapter = (prisma: PrismaClient): DataServiceType => {
           id: id,
         },
       })) as PaymentIntent | null;
+    },
+
+    async validateApiKey(apiKey: string) {
+      const key = await prisma.apiKey.findFirst({
+        where: {
+          token: apiKey,
+        },
+      });
+
+      if (!key) return { isValid: false };
+
+      if (!isValidEnvironment(key.environment)) {
+        return { isValid: false };
+      }
+
+      return {
+        isValid: true,
+        userId: key.userId,
+        environment: key.environment,
+      };
     },
   };
 };

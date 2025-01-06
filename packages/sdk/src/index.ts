@@ -1,9 +1,13 @@
 import axios, { type AxiosInstance, type AxiosRequestConfig } from "axios";
 import { SupportedCurrencies } from "./supported-currencies";
-import type { PaymentIntentOutput as _PaymentIntentOutput } from "@rccpr/core";
+import type {
+  PaymentIntentOutput as _PaymentIntentOutput,
+  API_KEY_HEADER_KEY,
+} from "@rccpr/core";
 import type { IsEqual } from "type-fest";
 
 type PaySdkOptions = {
+  apiKey: string;
   apiURL?: string;
   axiosOptions?: AxiosRequestConfig;
 };
@@ -22,13 +26,19 @@ type PaymentIntentOutput = {
 
 export class PaySdk {
   axios: AxiosInstance;
+
   constructor(options: PaySdkOptions) {
     this.axios = axios.create({
       ...(options.axiosOptions ?? {}),
       baseURL:
         options.apiURL ??
+        // eslint-disable-next-line turbo/no-undeclared-env-vars
         process.env.PC_API_URL ??
         "https://paymentcli.xyz/api/pay",
+      headers: {
+        // keep this in sync with the API_KEY_HEADER_KEY in the core package
+        ["x-pcli-api-key" satisfies typeof API_KEY_HEADER_KEY]: options.apiKey,
+      },
     });
   }
 
@@ -57,6 +67,7 @@ export class PaySdk {
 
     return response.data;
   };
+
   requestPaymentLink = async ({
     service,
     selectedCurrency,

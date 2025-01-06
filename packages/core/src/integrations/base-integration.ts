@@ -17,6 +17,7 @@ type Detail = {
     paymentIntentId: string;
     externalId: string;
     currency: SupportedCurrencies;
+    apiKey?: string;
   }): Effect.Effect<PaymentIntentOutput>;
 
   /**
@@ -190,6 +191,13 @@ const IntegrationLive = Layer.effect(
     return {
       createPaymentIntent: (options) =>
         Effect.gen(function* () {
+          const apiKey = options.apiKey;
+          if (!apiKey) throw new Error("API key is required");
+          const apiKeyValidation = yield* Effect.promise(() =>
+            dataService.validateApiKey(apiKey)
+          );
+          if (!apiKeyValidation.isValid) throw new Error("Invalid API key");
+
           const paymentIntent = yield* Effect.promise(() =>
             dataService.createPaymentIntent({
               baseUnit: options.baseUnit,

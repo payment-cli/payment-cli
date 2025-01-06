@@ -22,3 +22,14 @@ model PaymentIntent {
     @@index([externalId]) // Add index if needed for frequent lookups
     @@index([serviceName]) // Optional: index by service name
 }
+
+model ApiKey {
+    id          String   @id @default(cuid()) // UUID or cuid for unique IDs
+    environment String
+    token       String
+    userId      String
+    createdAt   DateTime @default(now()) // Automatically set the current timestamp
+    updatedAt   DateTime @updatedAt // Automatically update on modification
+
+    @@unique([userId, environment])
+}

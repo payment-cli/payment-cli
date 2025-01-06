@@ -10,7 +10,7 @@ import { PackageInfo } from "@/types";
  */
 export default function getPackageInfo(): PackageInfo {
   const __dirname = resolve();
-  const packageJsonPath = join(__dirname, '/package.json');
+  const packageJsonPath = join(__dirname, "/package.json");
   const packageJson = readFileSync(packageJsonPath, "utf-8");
   return JSON.parse(packageJson) as PackageInfo;
-};
+}

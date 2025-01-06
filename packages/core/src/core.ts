@@ -9,6 +9,7 @@ import { RccprHandler } from "./internal.types";
 import { SupportedCurrencies, SupportedHTTPMethod } from "./constants";
 import z from "zod";
 import { processRequest } from "./request-handler";
+import { openapiDocument } from "./openapi";
 
 type Integrations = {
   [T in string]: Layer.Layer<
@@ -17,6 +18,8 @@ type Integrations = {
     DataService | IntegrationConfigContext
   >;
 }[];
+
+export const API_KEY_HEADER_KEY = "x-pcli-api-key";
 
 export type DataServiceType = Context.Tag.Service<DataService>;
 type IntegrationConfigContextType =
@@ -37,6 +40,10 @@ const requestBody = z.object({
     "MXN",
   ] as const satisfies SupportedCurrencies[]),
   referenceId: z.string(),
+});
+
+const requestHeaders = z.object({
+  [API_KEY_HEADER_KEY]: z.string(),
 });
 
 class SchemaError {
@@ -92,20 +99,34 @@ export class Core {
       async (ctx) => {
         const program = Effect.gen(function* () {
           const integration = yield* Integration;
-          const parsedBody = requestBody.safeParse(ctx.req.body);
 
-          if (!parsedBody.success) {
+          const headers = requestHeaders.safeParse(ctx.req.headers);
+          if (!headers.success) {
             return yield* Effect.fail(
               new SchemaError(
-                parsedBody.error.flatten().formErrors.at(0) ?? "Schema error "
+                headers.error.flatten().formErrors.at(0) ?? "Schema error"
               )
             );
           }
+          if (!headers.data[API_KEY_HEADER_KEY]) {
+            return yield* Effect.fail(new SchemaError("API key is required"));
+          }
+
+          const parsedBody = requestBody.safeParse(ctx.req.body);
+          if (!parsedBody.success) {
+            return yield* Effect.fail(
+              new SchemaError(
+                parsedBody.error.flatten().formErrors.at(0) ?? "Schema error"
+              )
+            );
+          }
+
           const paymentIntent = yield* integration.createPaymentIntent({
             baseUnit: parsedBody.data.unitBase,
             currency: parsedBody.data.currency,
             paymentIntentId: parsedBody.data.referenceId,
             externalId: "",
+            apiKey: headers.data[API_KEY_HEADER_KEY],
           });
 
           return {
@@ -206,6 +227,13 @@ export class Core {
           };
         }
       );
+
+      router.add(SupportedHTTPMethod.GET, "/api-docs.json", async () => {
+        return {
+          headers: { "Content-Type": "application/json" },
+          body: openapiDocument,
+        };
+      });
     } catch (e) {
       console.log(e);
     }

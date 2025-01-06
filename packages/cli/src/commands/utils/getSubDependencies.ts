@@ -10,7 +10,9 @@ import { RegistryItemContentType } from "../types";
  * @returns A promise that resolves to an array of `RegistryItemContentType` objects.
  * @throws Will handle errors and exit the process if the connection to the components library fails.
  */
-export default async function getSubDependencies(paths: string[]): Promise<RegistryItemContentType[]> {
+export default async function getSubDependencies(
+  paths: string[]
+): Promise<RegistryItemContentType[]> {
   try {
     const response = await fetchRegistry(paths);
     return registryItemContentListSchema.parse(response);
@@ -18,4 +20,4 @@ export default async function getSubDependencies(paths: string[]): Promise<Regis
     handleErrors("Failed to connect to the components library.");
     process.exit(0);
   }
-};
+}

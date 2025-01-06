@@ -55,7 +55,6 @@ export const createFintocIntegration = (config: FintocConfig) => {
           return {} as any;
         });
       },
-
       createPaymentIntent({ baseUnit, externalId, currency, paymentIntentId }) {
         return Effect.gen(function* () {
           const secretKey = yield* Effect.promise(() =>
