@@ -1,0 +1,6 @@
+{
+  "name": "@rccpr/sdk",
+  "version": "0.1.1",
+  "license": "MIT",
+  "exports": "./src/index.ts"
+}
